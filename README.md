@@ -1,2 +1,2 @@
-# zoom-earlybird
+# zoom-earlybird [WIP]
 Python script that automatically signs in to Zoom using SSO (only supported domains) and automatically attends a meeting schedule.
