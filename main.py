@@ -6,7 +6,7 @@ import getpass
 import subprocess
 
 import json
-import random
+import secrets
 
 # Local code
 
@@ -33,7 +33,7 @@ except:
     print("Creating new configuration file.")
 
     user_config = {
-        "telemetry_id": random.randbytes(16).hex(),  # Random ID for telemetry, set to "opt-out" to opt-out of telemetry
+        "telemetry_id": secrets.token_hex(16),  # Random ID for telemetry, in config.json set to "opt-out" to opt-out of telemetry
         "local_commit_hash": "",
         "zoom_path": whereis_zoom(),
         "identity_provider": input("Identity provider URL (choose from list): "),
