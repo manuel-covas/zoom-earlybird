@@ -86,7 +86,7 @@ if update(user_config):
     save_config()
     print("Updated to commit "+user_config["local_commit_hash"])
     print("Restarting...")
-    subprocess.Popen(args=["python", "main.py"], cwd=os.getcwd())
+    subprocess.Popen(args=[psutil.Process().cmdline()[0], "main.py"], cwd=os.getcwd())
     exit(0)
 else:
     print("\nCurrently running commit "+user_config["local_commit_hash"])
