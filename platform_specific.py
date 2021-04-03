@@ -48,7 +48,19 @@ def seek_and_terminate():
 # Pass an URL to zoom
 
 def zoom_pass_url(url, user_config):
-    subprocess.Popen(args=[user_config["zoom_path"], "--url=\""+url+"\""])
+    
+    system_name = platform.system()
+
+    if system_name == "Windows":
+        subprocess.Popen(args=[user_config["zoom_path"], "--url="+url])
+
+    else:
+        if url.startswith("zoommtg://"):
+            finalURL = url
+        else:
+            finalURL = "zoommtg://" + url.split("//")[1].split("/j/")[0] + "/join?action=join&confno=" + url.split("/j/")[1].split("?")[0] + "&pwd=" + url.split("pwd=")[1].split("&")[0]
+        subprocess.Popen(args=[user_config["zoom_path"], finalURL])
+            
 
 
 # Suspend machine for duration_seconds
