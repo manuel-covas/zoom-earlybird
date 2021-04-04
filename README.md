@@ -1,5 +1,5 @@
 # zoom-earlybird
-Python script that automatically signs in to Zoom using SSO (only supported domains) and automatically attends a meeting schedule.\
+Python bot that automatically signs in to Zoom using SSO (only supported domains) and attends a meeting schedule.\
 Requires Python 3.6 or greater.
 
 # Contributing
@@ -90,6 +90,10 @@ Depending on your Linux distro this might not be available or enabled so you mig
 ## RTC Wakeups on macOS
 On macOS `pmset` is used to schedule a relative wakeup.\
 The machine is then put to sleep with `pmset sleepnow`.
+
+# Updates
+An update check against this repository is performed and at run-time.\
+If a newer version is available an update will be carried out.
 
 # Telemtry
 At first run a random ID will be generated and stored in your `config.json`\
