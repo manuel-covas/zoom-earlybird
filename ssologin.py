@@ -67,16 +67,16 @@ def sso_login(config):
     req2 = session.post("https://webconf-colibri.fccn.pt/simplesaml/saml2/idp/SSOService.php", [("SAMLRequest", saml_request)])
     check_response(req2)
 
-    req3_url_path = html.unescape(req2.text.split('<form id="IdPList" name="IdPList" method="post" onSubmit="return checkForm()" action="')[1].split('" >')[0])
-    req3_url = "https://wayf.fccn.pt" + req3_url_path
 
+    req3_url = req2.text.split('<form class="mod-search hidden" method="post" action="')[1].split('"')[0]
+    req3_id = req2.text.split('<input type="hidden" name="ID" value="')[1].split('"')[0]
 
-    print("Submitting identity provider to "+req3_url.split("?")[0])
+    print("Submitting identity provider to "+req3_url)
 
-    req3 = session.post(req3_url, [("user_idp", config["identity_provider"]), ("Selected", "Entrar")])
+    req3 = session.post(req3_url, [("ID", req3_id), ("idp", config["identity_provider"])])
     check_response(req3)
 
-    req4_url = req3.text.split('<form method="post" action="')[1].split('">')[0]
+    req4_url = req3.text.split('<form id="ProcessForm" method="post" action="')[1].split('"')[0]
     saml_request = req3.text.split('<input type="hidden" name="SAMLRequest" value="')[1].split('"')[0]
 
 
@@ -109,17 +109,25 @@ def sso_login(config):
     req6 = session.post(req6_url, [("SAMLResponse", saml_response)])
     check_response(req6)
 
-    req7_url = req6.text.split('<form method="post" action="')[1].split('"')[0]
-    saml_response = req6.text.split('name="SAMLResponse" value="')[1].split('"')[0]
+    req7_url = req6.text.split('<form id="ProcessForm" method="post" action="')[1].split('"')[0]
+    saml_response = req6.text.split('<input type="hidden" name="SAMLResponse" value="')[1].split('"')[0]
 
 
-    print("Submitting SAMLResponse to "+req7_url+" with Firefox's User-Agent Header (Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0)")
+    print("Submitting SAMLResponse to "+req7_url)
 
-    req7 = session.post(req7_url, [("SAMLResponse", saml_response)], headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0"})
+    req7 = session.post(req7_url, [("SAMLResponse", saml_response)])
     check_response(req7)
     
+    req8_url = req7.text.split('<form method="post" action="')[1].split('"')[0]
+    saml_response = req7.text.split('<input type="hidden" name="SAMLResponse" value="')[1].split('"')[0]
 
-    temp = req7.text.split('" id="sso-button"')[0].split('href="')
+
+    print("Submitting SAMLResponse to "+req8_url+" with Firefox's User-Agent Header (Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0)")
+
+    req8 = session.post(req8_url, [("SAMLResponse", saml_response)], headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:87.0) Gecko/20100101 Firefox/87.0"})
+    check_response(req8)
+
+    temp = req8.text.split('" id="sso-button"')[0].split('href="')
     zoom_desktop_sso_link = temp[len(temp) - 1]
 
 
